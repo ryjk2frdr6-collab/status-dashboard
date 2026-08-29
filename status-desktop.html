@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status — Desktop / Tablet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0A0913;
+  --panel:#161331;
+  --panel-2:#1D1A3B;
+  --edge:#332C57;
+  --edge-hot:#4A3F7C;
+  --light:#8FD7F2;
+  --gold:#E0AE5E;
+  --garnet:#B4485C;
+  --ink:#D8D2E8;
+  --dim:#8A83A8;
+  --display:"Cormorant Unicase","Palatino Linotype",Georgia,serif;
+  --body:"EB Garamond",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1100px 640px at 50% -12%, #241f47 0%, transparent 64%),
+    radial-gradient(800px 520px at 88% 112%, #1a2c3d 0%, transparent 62%),
+    var(--void);
+  color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;
+  min-height:100vh;padding:30px 20px 60px;
+}
+.wrap{max-width:1120px;margin:0 auto}
+
+/* ============ STATUS WINDOW FRAME ============ */
+.window{
+  position:relative;
+  border:1px solid var(--edge-hot);
+  background:linear-gradient(165deg,rgba(29,26,59,.94),rgba(11,10,24,.96));
+  box-shadow:0 0 0 1px rgba(143,215,242,.09), 0 0 60px rgba(143,215,242,.10), inset 0 0 90px rgba(90,74,150,.14);
+  padding:0 0 26px;
+}
+.window > .corner{position:absolute;width:20px;height:20px;border:2px solid var(--light);opacity:.85;pointer-events:none}
+.c-tl{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.c-tr{top:-1px;right:-1px;border-left:0;border-bottom:0}
+.c-bl{bottom:-1px;left:-1px;border-right:0;border-top:0}
+.c-br{bottom:-1px;right:-1px;border-left:0;border-top:0}
+
+.titlebar{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  padding:14px 24px;border-bottom:1px solid var(--edge);
+  background:linear-gradient(180deg,rgba(143,215,242,.10),transparent);
+}
+.titlebar h1{
+  font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.42em;
+  margin:0;color:#EAF7FF;text-shadow:0 0 20px rgba(143,215,242,.5);
+}
+.titlebar .rule{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--edge-hot),transparent);max-width:220px}
+.diamond{width:9px;height:9px;background:var(--light);transform:rotate(45deg);box-shadow:0 0 12px var(--light)}
+
+/* ============ IDENTITY ROW ============ */
+.identity{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding:20px 28px;border-bottom:1px solid var(--edge);
+}
+.who h2{font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:.1em;margin:0;color:#F2EAD8}
+.who p{margin:4px 0 0;font-size:15px;color:var(--dim);letter-spacing:.08em}
+.counters{display:flex;gap:34px;flex-wrap:wrap}
+.counter{text-align:right}
+.counter b{display:block;font-family:var(--display);font-size:26px;color:var(--light);line-height:1;font-variant-numeric:tabular-nums}
+.counter span{display:block;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+
+/* ============ GRID ============ */
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:0}
+.col-l{border-right:1px solid var(--edge)}
+.block{padding:22px 28px;border-bottom:1px solid var(--edge)}
+.block:last-child{border-bottom:0}
+.col-r .block{border-bottom:0}
+
+/* section head: modern label + quote subhead */
+.head{margin-bottom:16px}
+.head h3{
+  font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.3em;
+  margin:0;color:var(--gold);
+}
+.quote{margin:7px 0 0;font-size:15px;font-style:italic;color:var(--dim);line-height:1.4}
+.quote cite{
+  display:block;font-style:normal;font-size:11.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:#5F5885;margin-top:5px;
+}
+
+/* ============ STAT BARS ============ */
+.statline{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:9px;flex-wrap:wrap}
+.statline .val{font-family:var(--display);font-weight:700;font-size:30px;color:#F2EAD8;line-height:1;font-variant-numeric:tabular-nums}
+.statline .val u{text-decoration:none;font-family:var(--body);font-style:italic;font-size:15px;color:var(--dim);margin-left:8px}
+.statline .pct{font-family:var(--display);font-size:17px;color:var(--light);letter-spacing:.1em}
+
+.bar{height:20px;border:1px solid var(--edge-hot);background:#0B0A1C;padding:3px;position:relative}
+.bar .glow{filter:drop-shadow(0 0 7px rgba(143,215,242,.65));height:100%}
+.bar .fill{
+  height:100%;
+  background:linear-gradient(90deg,#2F6C8E,var(--light));
+  -webkit-mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 10px);
+  mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 10px);
+}
+.bar.gold .fill{background:linear-gradient(90deg,#8A6320,var(--gold))}
+.bar.gold .glow{filter:drop-shadow(0 0 7px rgba(224,174,94,.6))}
+.bar .marker{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--garnet)}
+.bar .marker::after{
+  content:"";position:absolute;top:-4px;left:-3px;border:3px solid transparent;border-top-color:var(--garnet);
+}
+
+.legend{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--dim)}
+.legend b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.legend .warn{color:var(--garnet)}
+
+/* ============ ATTRIBUTE ROWS ============ */
+.attrs{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--edge);background:rgba(11,10,28,.5)}
+.attr{padding:16px 18px}
+.attr + .attr{border-left:1px solid var(--edge)}
+.attr .k{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.attr .v{font-family:var(--display);font-weight:700;font-size:28px;color:#F2EAD8;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.attr .v u{text-decoration:none;font-family:var(--body);font-style:italic;font-size:14px;color:var(--dim);margin-left:5px}
+.delta{font-size:13px;margin-top:5px;letter-spacing:.06em}
+.delta.up{color:var(--light)}
+.delta.flat{color:var(--dim)}
+.spark{width:100%;height:40px;display:block;margin-top:10px}
+.bars7{display:flex;gap:4px;align-items:flex-end;height:40px;margin-top:10px}
+.bars7 i{flex:1;background:#2C2551}
+.bars7 i.now{background:linear-gradient(180deg,var(--gold),#6E4C15);box-shadow:0 0 10px rgba(224,174,94,.45)}
+
+/* ============ TASK LIST ============ */
+.tasks{list-style:none;margin:0;padding:0;border-top:1px solid var(--edge)}
+.tasks li{
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;
+  padding:12px 2px;border-bottom:1px solid rgba(51,44,87,.75);
+}
+.box{width:18px;height:18px;border:1px solid var(--gold);transform:rotate(45deg);margin-top:3px;position:relative}
+.box.on{background:var(--gold);box-shadow:0 0 12px rgba(224,174,94,.55)}
+.tname{font-size:16px;color:#EDE6F5;line-height:1.3}
+.tsub{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.done .tname{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(224,174,94,.55)}
+.ttime{font-size:14px;color:var(--dim);font-variant-numeric:tabular-nums;padding-top:2px}
+.summary{
+  margin-top:16px;border:1px solid var(--edge-hot);background:rgba(143,215,242,.06);
+  padding:12px 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--display);font-size:13.5px;letter-spacing:.2em;color:var(--light);
+}
+.summary span{color:var(--dim)}
+
+/* ============ TABS ============ */
+.tabs{display:flex;flex-wrap:wrap;margin-top:18px;border:1px solid var(--edge-hot);background:rgba(11,10,24,.7)}
+.tabs button{
+  flex:1 1 auto;background:none;border:0;border-right:1px solid var(--edge);
+  color:var(--dim);font-family:var(--display);font-size:13px;letter-spacing:.26em;
+  padding:16px 12px;cursor:pointer;transition:color .18s,background .18s;
+}
+.tabs button:last-child{border-right:0}
+.tabs button:hover{color:var(--gold);background:rgba(224,174,94,.07)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#0A0913}
+.tabs button:focus-visible{outline:2px solid var(--light);outline-offset:-4px}
+
+.note{margin-top:20px;text-align:center;font-size:13px;color:#4E4670;font-style:italic}
+
+@media (max-width:880px){
+  .grid{grid-template-columns:1fr}
+  .col-l{border-right:0}
+  .col-r .block{border-top:1px solid var(--edge)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="window">
+  <i class="corner c-tl"></i><i class="corner c-tr"></i><i class="corner c-bl"></i><i class="corner c-br"></i>
+
+  <div class="titlebar">
+    <span class="rule"></span>
+    <span class="diamond"></span>
+    <h1>STATUS</h1>
+    <span class="diamond"></span>
+    <span class="rule"></span>
+  </div>
+
+  <div class="identity">
+    <div class="who">
+      <h2>RAIN</h2>
+      <p>Violinist &middot; Saturday, 29 August 2026</p>
+    </div>
+    <div class="counters">
+      <div class="counter"><b>241</b><span>Day</span></div>
+      <div class="counter"><b>76</b><span>Days to audition</span></div>
+      <div class="counter"><b>9</b><span>Day streak</span></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-l">
+
+      <!-- FINANCES -->
+      <section class="block">
+        <div class="head">
+          <h3>FINANCES</h3>
+          <p class="quote">&ldquo;&hellip;food and cheer above hoarded gold&rdquo;
+            <cite>J.R.R. Tolkien, The Hobbit</cite></p>
+        </div>
+        <div class="statline">
+          <span class="val">₱15,340<u>of ₱24,000</u></span>
+          <span class="pct">64%</span>
+        </div>
+        <div class="bar">
+          <div class="glow"><div class="fill" style="width:64%"></div></div>
+          <span class="marker" style="left:12%"></span>
+        </div>
+        <div class="legend">
+          <span>Burn rate <b>₱742/day</b></span>
+          <span>Last in <b>+₱4,200</b></span>
+          <span class="warn">Empty in <b>11 days</b></span>
+        </div>
+      </section>
+
+      <!-- WRITING -->
+      <section class="block">
+        <div class="head">
+          <h3>WRITING</h3>
+          <p class="quote">&ldquo;The Wheel weaves as the Wheel wills.&rdquo;
+            <cite>Robert Jordan, The Wheel of Time</cite></p>
+        </div>
+        <div class="statline">
+          <span class="val">12,430<u>of 20,000 words</u></span>
+          <span class="pct">62%</span>
+        </div>
+        <div class="bar gold">
+          <div class="glow"><div class="fill" style="width:62%"></div></div>
+        </div>
+        <div class="legend">
+          <span>Pace <b>1,036/day</b></span>
+          <span>Needed <b>2,523/day</b></span>
+          <span>Best run <b>9 days</b></span>
+        </div>
+      </section>
+
+      <!-- BODY -->
+      <section class="block">
+        <div class="head">
+          <h3>BODY</h3>
+          <p class="quote">&ldquo;the Will and the Word&rdquo;
+            <cite>David Eddings, The Belgariad</cite></p>
+        </div>
+        <div class="attrs">
+          <div class="attr">
+            <div class="k">Weight</div>
+            <div class="v">58.0<u>kg</u></div>
+            <div class="delta up">&#9650; 0.6 kg over 8 weeks</div>
+            <svg class="spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,24 28,21 56,26 84,18 112,16 140,20 168,13 200,11"
+                fill="none" stroke="#8FD7F2" stroke-width="2" vector-effect="non-scaling-stroke"/>
+              <circle cx="197" cy="11" r="3" fill="#E0AE5E"/>
+            </svg>
+          </div>
+          <div class="attr">
+            <div class="k">Lift &mdash; session total</div>
+            <div class="v">4,820<u>kg</u></div>
+            <div class="delta up">&#9650; Best of the last 7</div>
+            <div class="bars7">
+              <i style="height:44%"></i><i style="height:58%"></i><i style="height:51%"></i>
+              <i style="height:66%"></i><i style="height:72%"></i><i style="height:63%"></i>
+              <i class="now" style="height:92%"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PRACTICE -->
+    <div class="col-r">
+      <section class="block">
+        <div class="head">
+          <h3>PRACTICE</h3>
+          <p class="quote">&ldquo;Journey before destination.&rdquo;
+            <cite>Brandon Sanderson, The Stormlight Archive</cite></p>
+        </div>
+        <ul class="tasks">
+          <li class="done">
+            <span class="box on" aria-hidden="true"></span>
+            <span class="tname">Ševčík Op. 1 — bowing sets<span class="tsub">Complete</span></span>
+            <span class="ttime">40m</span>
+          </li>
+          <li class="done">
+            <span class="box on" aria-hidden="true"></span>
+            <span class="tname">Scales — 4 keys, 3 octaves<span class="tsub">Complete</span></span>
+            <span class="ttime">30m</span>
+          </li>
+          <li class="done">
+            <span class="box on" aria-hidden="true"></span>
+            <span class="tname">Bach BWV 1005 — Largo<span class="tsub">Complete</span></span>
+            <span class="ttime">50m</span>
+          </li>
+          <li class="done">
+            <span class="box on" aria-hidden="true"></span>
+            <span class="tname">Wieniawski No. 2 — Romance<span class="tsub">Complete</span></span>
+            <span class="ttime">60m</span>
+          </li>
+          <li>
+            <span class="box" aria-hidden="true"></span>
+            <span class="tname">Paganini Caprice No. 9<span class="tsub">Required &middot; hands separate</span></span>
+            <span class="ttime">45m</span>
+          </li>
+          <li>
+            <span class="box" aria-hidden="true"></span>
+            <span class="tname">Bach BWV 1005 — Allegro assai<span class="tsub">Required &middot; before end of day</span></span>
+            <span class="ttime">40m</span>
+          </li>
+        </ul>
+        <div class="summary">
+          4 OF 6 DONE
+          <span>1h 25m left</span>
+        </div>
+        <div class="legend" style="margin-top:14px">
+          <span>This week <b>31.5h</b> of <b>34h</b></span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button role="tab" aria-selected="true">FINANCES</button>
+  <button role="tab" aria-selected="false">WRITING</button>
+  <button role="tab" aria-selected="false">BODY</button>
+  <button role="tab" aria-selected="false">PRACTICE</button>
+</nav>
+
+<p class="note">Static mockup &mdash; all figures are placeholders.</p>
+</div>
+</body>
+</html>
